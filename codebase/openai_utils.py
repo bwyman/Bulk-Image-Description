@@ -41,6 +41,7 @@ def parse_response(response_str):
     return parsed_responses
 
 def call_openai_assistant(image_url, max_retries=openai_config['max_retries'], 
+retry_delay=openai_config['retry_delay']):
     """
     Calls the OpenAI assistant to generate alt text and image description for the given image URL.
 
@@ -52,7 +53,6 @@ def call_openai_assistant(image_url, max_retries=openai_config['max_retries'],
     Returns:
         str: The generated alt text and image description, or None if an error occurs.
     """
-retry_delay=openai_config['retry_delay']):
     openai.api_key = openai_config['api_key']
     
     retry_count = 0
