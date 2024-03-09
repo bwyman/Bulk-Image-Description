@@ -42,19 +42,18 @@ Bulk Image Description/
 2. Install the required dependencies:
 	pip install -r requirements.txt
 3. Set up the API keys and configurations:
-	- Open `config.py` and update the `openai_config` dictionary with your OpenAI API key and other settings.
-	- Add configurations for other AI engines (e.g., Claude) as needed.
+	- Open `config.py` and update the `openai_config` dictionary with your OpenAI / Anthropic API key and other settings.
 4. Prepare the input CSV files:
 	- Place the CSV files containing artwork data in the respective organization's "Source CSVs" directory (e.g., `CMA/Source CSVs/`).
-	- Ensure that the CSV files have a column named "Obj URL" containing the URLs of the artwork pages.
+	- Ensure that the CSV files have a columns named "Name", "Obj URL" containing the Names and URLs of the artwork pages.
 
 ## Usage and Execution
 To generate alt text and descriptions for images, run the following command:
 python codebase/main.py -org <organization> -ai <ai_name> [-images] <input_csv_filename>
-	- `<organization>`: The name of the organization (e.g., nga).
-	- `<ai_name>`: The name of the AI engine to use (e.g., openai, claude).
-	- `-images` (optional): Flag to download and resize images. If not provided, only alt text and descriptions will be generated.
-	- `<input_csv_filename>`: The filename of the input CSV file (assumed to be in the organization's "Source CSVs" directory).
+- `<organization>`: The name of the organization (e.g., nga).
+- `<ai_name>`: The name of the AI engine to use (e.g., openai, claude).
+- `-images` (optional): Flag to download and resize images. If not provided, only alt text and descriptions will be generated.
+- `<input_csv_filename>`: The filename of the input CSV file (assumed to be in the organization's "Source CSVs" directory).
 
 Example:
 python codebase/main.py -org nga -ai openai -images nga_example.csv
@@ -65,6 +64,7 @@ The generated alt text and descriptions will be saved in a new CSV file in the o
 - To add support for a new organization:
   1. Create a new `<organization>_image_utils.py` file in the `codebase/orgs/` directory.
   2. Implement the `extract_image_url` function in the new file to extract the image URL from the organization's artwork page.
+  3. Create a new root level ORG directory with a Source CSVs directory.
 
 - To add support for a new AI engine:
   1. Create a new `<ai_name>_utils.py` file in the `codebase/` directory.
