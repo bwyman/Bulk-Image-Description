@@ -1,7 +1,14 @@
 # claude_utils.py
 import anthropic
 import time
+import base64
+import httpx
+import requestss
+from PIL import Image
+from io import BytesIO
 from config import claude_config
+from prompt_library import prompts
+from image_processing import download_and_resize_image
 
 def parse_response(response_str):
     parsed_responses = {
@@ -29,21 +36,33 @@ def parse_response(response_str):
 
     return parsed_responses
 
-def call_claude_assistant(image_url, max_retries=claude_config['max_retries'], retry_delay=claude_config['retry_delay']):
+
+def call_claude_assistant(image_url, source_image_path=None, resized_image_path=None, max_retries=claude_config['max_retries'], retry_delay=claude_config['retry_delay']):
     client = anthropic.Client(api_key=claude_config['api_key'])
-    
+
     retry_count = 0
     while retry_count < max_retries:
         try:
             prompt_version = claude_config['prompt_version']
             instructions = prompts[prompt_version]
 
+            image_media_type = "image/jpeg"
+            
+            if source_image_path and resized_image_path:
+                download_and_resize_image(image_url, source_image_path, resized_image_path)
+                with open(resized_image_path, "rb") as image_file:
+                    image_data = base64.b64encode(image_file.read()).decode("utf-8")
+            else:
+                response = requests.get(image_url)
+                image_data = base64.b64encode(response.content).decode("utf-8")
+
             message_list = [
                 {
                     "role": "user",
                     "content": [
+                        {"type": "text", "text": "Here is the image:"},
                         {"type": "image", "source": {"type": "base64", "media_type": image_media_type, "data": image_data}},
-                        {"type": "text", "text": "What's in this image?"}
+                        {"type": "text", "text": instructions}
                     ]
                 }
             ]

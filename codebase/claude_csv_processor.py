@@ -60,9 +60,10 @@ def process_csv(input_csv_path, organization, download_images=False):
                             image_filename = os.path.basename(image_url)
                             source_image_path = os.path.join(source_images_directory, image_filename)
                             resized_image_path = os.path.join(resized_images_directory, image_filename)
-                            download_and_resize_image(image_url, source_image_path, resized_image_path)
-
-                        response = claude_utils.call_claude_assistant(image_url)
+                            response = claude_utils.call_claude_assistant(image_url, source_image_path, resized_image_path)
+                        else:
+                            response = claude_utils.call_claude_assistant(image_url, None, None)
+                        
                         if response:
                             parsed_responses = claude_utils.parse_response(response)
                             row['Alt Text (Short)'] = parsed_responses.get('alt_text_short', 'Error')
