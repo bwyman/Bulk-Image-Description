@@ -28,7 +28,7 @@ codebase/
 	config.py
 	prompt_library.py
 
-org/
+<org>/
 	Source CSVs/
 	Result CSVs/
 	Source Images/
@@ -50,13 +50,13 @@ org/
 ## Usage and Execution
 To generate alt text and descriptions for images, run the following command:
 python codebase/main.py -org <organization> -ai <ai_name> [-images] <input_csv_filename>
-	- `<organization>`: The name of the organization (e.g., CMA, GOK, LACMA, MET, NGA).
+	- `<organization>`: The name of the organization (e.g., nga).
 	- `<ai_name>`: The name of the AI engine to use (e.g., openai, claude).
 	- `-images` (optional): Flag to download and resize images. If not provided, only alt text and descriptions will be generated.
 	- `<input_csv_filename>`: The filename of the input CSV file (assumed to be in the organization's "Source CSVs" directory).
 
 Example:
-python codebase/main.py -org CMA -ai openai -images cma_highlights.csv
+python codebase/main.py -org CMA -ai openai -images nga_example.csv
 
 The generated alt text and descriptions will be saved in a new CSV file in the organization's "Result CSVs" directory, with the filename format: `<input_csv_filename>_<ai_name>_<prompt_version>_<timestamp>.csv`.## 
 

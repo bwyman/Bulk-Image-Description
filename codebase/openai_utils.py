@@ -63,7 +63,7 @@ retry_delay=openai_config['retry_delay']):
             formatted_instructions = ''.join([f'"{line}"\n' for line in instructions.split('\n')])
 
             response = openai.ChatCompletion.create(
-                model="gpt-4-vision-preview",
+                model=openai_config['model_name'],
                 messages=[
                     {"role": "system", "content": formatted_instructions},
                     {

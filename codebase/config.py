@@ -2,6 +2,7 @@
 
 openai_config = {
     'api_key': 'YOUR_OPENAI_API_KEY',
+    'model_name': 'gpt-4-vision-preview'
     'max_retries': 3,
     'retry_delay': 5,
     'rate_limit_wait_time': 1.5,
