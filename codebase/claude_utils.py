@@ -44,6 +44,9 @@ def call_claude_assistant(image_url, source_image_path=None, resized_image_path=
     while retry_count < max_retries:
         try:
             prompt_version = claude_config['prompt_version']
+            if prompt_version not in prompts:
+                raise ValueError(f"Prompt '{prompt_version}' not found in the prompt library.")
+            
             instructions = prompts[prompt_version]
 
             image_media_type = "image/jpeg"
@@ -81,5 +84,5 @@ def call_claude_assistant(image_url, source_image_path=None, resized_image_path=
             time.sleep(retry_delay)
             retry_count += 1
     
-    print(f"Anthropic API error after {max_retries} retries. Moving on to the next image.")
+    print(f"OpenAI API error after {max_retries} retries. Moving on to the next image.")
     return None

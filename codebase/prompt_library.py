@@ -76,10 +76,20 @@ def extract_prompts(text):
     Returns:
         dict: A dictionary with prompt names as keys and prompt content as values.
     """
-    pattern = r"-----\n(.*?)\n(.*?)-----"
-    matches = re.findall(pattern, text, re.DOTALL)
-    return {name.strip(): content.strip() for name, content in matches}
+    prompts = {}
+    prompt_blocks = text.strip().split("-----")[1:]
+
+    for block in prompt_blocks:
+        lines = block.strip().split("\n")
+        if lines:
+            name = lines[0].strip()
+            content = "\n".join(lines[1:]).strip()
+            prompts[name] = content
+
+            # Debugging: Print the prompt name and its content
+            # print(f"Prompt Name: {name}")
+            # print(f"Prompt Content:\n{content}\n")
+
+    return prompts
 
 prompts = extract_prompts(prompt_text)
-
-# Add more prompts here for different versions or variations

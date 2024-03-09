@@ -59,6 +59,9 @@ retry_delay=openai_config['retry_delay']):
     while retry_count < max_retries:
         try:
             prompt_version = openai_config['prompt_version']
+            if prompt_version not in prompts:
+                raise ValueError(f"Prompt '{prompt_version}' not found in the prompt library.")
+            
             instructions = prompts[prompt_version]
             formatted_instructions = ''.join([f'"{line}"\n' for line in instructions.split('\n')])
 
