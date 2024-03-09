@@ -14,25 +14,26 @@ Bulk Image Description is a Python project that automates the process of generat
 
 Bulk Image Description/
 codebase/
-	main.py
-	csv_processor.py
-	orgs/
-		cma_image_utils.py
-		gok_image_utils.py
-		lacma_image_utils.py
-		met_image_utils.py
-		nga_image_utils.py
-	openai_utils.py
-	claude_utils.py
-	image_processing.py
-	config.py
-	prompt_library.py
+- main.py
+- claude_csv_processor.py
+- openai_csv_processor.py
+- orgs/
+	- cma_image_utils.py
+	- gok_image_utils.py
+	- lacma_image_utils.py
+	- met_image_utils.py
+	- nga_image_utils.py
+- openai_utils.py
+- claude_utils.py
+- image_processing.py
+- config.py
+- prompt_library.py
 
 <org>/
-	Source CSVs/
-	Result CSVs/
-	Source Images/
-	Resized Images/
+- Source CSVs/
+- Result CSVs/
+- Source Images/
+- Resized Images/
 
 ## Installation
 
@@ -56,7 +57,7 @@ python codebase/main.py -org <organization> -ai <ai_name> [-images] <input_csv_f
 	- `<input_csv_filename>`: The filename of the input CSV file (assumed to be in the organization's "Source CSVs" directory).
 
 Example:
-python codebase/main.py -org CMA -ai openai -images nga_example.csv
+python codebase/main.py -org nga -ai openai -images nga_example.csv
 
 The generated alt text and descriptions will be saved in a new CSV file in the organization's "Result CSVs" directory, with the filename format: `<input_csv_filename>_<ai_name>_<prompt_version>_<timestamp>.csv`.## 
 
