@@ -13,27 +13,27 @@ Bulk Image Description is a Python project that automates the process of generat
 ## Directory Structure
 
 Bulk Image Description/
-- codebase/
-	- main.py
-	- claude_csv_processor.py
-	- openai_csv_processor.py
-	- orgs/
-		- cma_image_utils.py
-		- gok_image_utils.py
-		- lacma_image_utils.py
-		- met_image_utils.py
-		- nga_image_utils.py
-	- openai_utils.py
-	- claude_utils.py
-	- image_processing.py
-	- config.py
-	- prompt_library.py
+- codebase/ : Contains the main Python files for the project.
+	- main.py : The entry point of the program.
+	- claude_csv_processor.py : Handles CSV file processing and coordinates the image description generation for OpenAI.
+	- openai_csv_processor.py : Handles CSV file processing and coordinates the image description generation for Anthropic Claude.
+	- orgs/ : Contains organization-specific image scraping modules.
+		- cma_image_utils.py : Cleveland Museum of Art
+		- gok_image_utils.py : Georgia O'Keeffe Museum
+		- lacma_image_utils.py : LACMA
+		- met_image_utils.py : The Met
+		- nga_image_utils.py : National Gallery of Art
+	- openai_utils.py : Handles interactions with the OpenAI API.
+	- claude_utils.py : Handles interactions with the Anthropic Claude API.
+	- image_processing.py : Provides functions for downloading and resizing images.
+	- config.py : Stores configuration settings for the project.
+	- prompt_library.py : Contains prompts for generating descriptions.
 
-- your_org/
-	- Source CSVs/
-	- Result CSVs/
-	- Source Images/
-	- Resized Images/
+- your_org/ : Each organization has its own directory( e.g., cma/, gok/, lacma/, met/, nga/, ...
+	- Source CSVs/ : Contains the input CSV files with artwork data.
+	- Result CSVs/ : Stores the generated CSV files with alt text and descriptions.
+	- Source Images/ : Stores the downloaded source images.
+	- Resized Images/ : Stores the resized images.
 
 ## Installation
 
