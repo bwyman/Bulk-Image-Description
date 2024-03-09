@@ -13,27 +13,27 @@ Bulk Image Description is a Python project that automates the process of generat
 ## Directory Structure
 
 Bulk Image Description/
-codebase/
-- main.py
-- claude_csv_processor.py
-- openai_csv_processor.py
-- orgs/
-	- cma_image_utils.py
-	- gok_image_utils.py
-	- lacma_image_utils.py
-	- met_image_utils.py
-	- nga_image_utils.py
-- openai_utils.py
-- claude_utils.py
-- image_processing.py
-- config.py
-- prompt_library.py
+- codebase/
+	- main.py
+	- claude_csv_processor.py
+	- openai_csv_processor.py
+	- orgs/
+		- cma_image_utils.py
+		- gok_image_utils.py
+		- lacma_image_utils.py
+		- met_image_utils.py
+		- nga_image_utils.py
+	- openai_utils.py
+	- claude_utils.py
+	- image_processing.py
+	- config.py
+	- prompt_library.py
 
-<org>/
-- Source CSVs/
-- Result CSVs/
-- Source Images/
-- Resized Images/
+- your_org/
+	- Source CSVs/
+	- Result CSVs/
+	- Source Images/
+	- Resized Images/
 
 ## Installation
 
