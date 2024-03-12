@@ -3,7 +3,7 @@ import anthropic
 import time
 import base64
 import httpx
-import requestss
+import requests
 from PIL import Image
 from io import BytesIO
 from config import claude_config

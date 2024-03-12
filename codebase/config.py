@@ -6,7 +6,7 @@ openai_config = {
     'max_retries': 3,
     'retry_delay': 5,
     'rate_limit_wait_time': 1.5,
-    'max_tokens': 2000,
+    'max_tokens': 4096,
     'prompt_version': 'iris_v5',
 }
 
@@ -15,7 +15,7 @@ claude_config = {
     'model_name': 'claude-3-opus-20240229',
     'max_retries': 3,
     'retry_delay': 5,
-    'max_tokens': 2048,
+    'max_tokens': 4096,
     'prompt_version': 'iris_v5',
 }
 
