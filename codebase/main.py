@@ -22,15 +22,21 @@ if __name__ == "__main__":
     input_csv_filename = args.input_csv_filename
     organization = args.organization
     ai_name = args.ai_name
-    download_images = args.download_images
+    
+    if ai_name.lower() == 'claude':
+        download_images = True
+    else:
+        download_images = args.download_images
 
     project_directory = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     input_csv_path = os.path.join(project_directory, organization, 'Source CSVs', input_csv_filename)
 
     try:
-        print(f"Processing CSV file: {input_csv_filename}")
         csv_processor = import_module(f"{ai_name.lower()}_csv_processor")
         output_csv_path = csv_processor.process_csv(input_csv_path, organization, download_images)
-        print(f"\nProcessed CSV saved as: {output_csv_path}")
     except FileNotFoundError:
         print(f"FileNotFoundError: No such file or directory: '{input_csv_path}'")
+    except ModuleNotFoundError as e:
+        print(f"ModuleNotFoundError: {e}")
+    except Exception as e:
+        print(f"Unexpected error: {e}")

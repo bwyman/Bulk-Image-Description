@@ -38,6 +38,7 @@ def process_csv(input_csv_path, organization, download_images=False):
 
     try:
         with open(input_csv_path, 'r', newline='', encoding='utf-8') as infile:
+            print("Input CSV file opened successfully.")
             reader = csv.DictReader(infile)
             fieldnames = reader.fieldnames + ['Image URL', 'Alt Text (Short)', 'Alt Text (Long)', 'Image Description']
 
@@ -57,9 +58,11 @@ def process_csv(input_csv_path, organization, download_images=False):
 
                     if image_url:
                         if download_images:
-                            image_filename = os.path.basename(image_url)
+                            object_name = row['Name'].replace(' ', '_')  # Replace spaces with underscores
+                            image_filename = f"{object_name}.jpg"
                             source_image_path = os.path.join(source_images_directory, image_filename)
                             resized_image_path = os.path.join(resized_images_directory, image_filename)
+                            download_and_resize_image(image_url, source_image_path, resized_image_path)
                             response = claude_utils.call_claude_assistant(image_url, source_image_path, resized_image_path)
                         else:
                             response = claude_utils.call_claude_assistant(image_url, None, None)

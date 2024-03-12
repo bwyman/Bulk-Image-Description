@@ -4,6 +4,7 @@ import time
 import base64
 import httpx
 import requests
+import mimetypes
 from PIL import Image
 from io import BytesIO
 from config import claude_config
@@ -47,35 +48,61 @@ def call_claude_assistant(image_url, source_image_path=None, resized_image_path=
             if prompt_version not in prompts:
                 raise ValueError(f"Prompt '{prompt_version}' not found in the prompt library.")
             
-            instructions = prompts[prompt_version]
+            instructions = prompts[prompt_version].replace('\n', ' ')
+            # print("Claude Instructions:", instructions)
 
-            image_media_type = "image/jpeg"
-            
-            if source_image_path and resized_image_path:
-                download_and_resize_image(image_url, source_image_path, resized_image_path)
+            if resized_image_path:
                 with open(resized_image_path, "rb") as image_file:
                     image_data = base64.b64encode(image_file.read()).decode("utf-8")
-            else:
-                response = requests.get(image_url)
-                image_data = base64.b64encode(response.content).decode("utf-8")
+                    
+                    # Determine the media type based on the file extension
+                    media_type, _ = mimetypes.guess_type(resized_image_path)
+                    if media_type is None:
+                        media_type = "application/octet-stream"  # Default media type if not determined
 
-            message_list = [
-                {
-                    "role": "user",
-                    "content": [
-                        {"type": "text", "text": "Here is the image:"},
-                        {"type": "image", "source": {"type": "base64", "media_type": image_media_type, "data": image_data}},
-                        {"type": "text", "text": instructions}
+                    message_list = [
+                        {
+                            "role": "user",
+                            "content": [
+                                {
+                                    "type": "text",
+                                    "text": instructions
+                                },
+                                {
+                                    "type": "image",
+                                    "source": {
+                                    	"type": "base64",
+                                    	"media_type": media_type,
+                                    	"data": image_data,
+                                    },
+                                }
+                            ],
+                        }
                     ]
-                }
-            ]
-
+            else:
+                message_list = [
+                    {
+                        "role": "user",
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": f"Here is the image URL: {image_url}"
+                            },
+                            {
+                                "type": "text",
+                                "text": instructions
+                            }
+                        ],
+                    }
+                ]
+            
             response = client.messages.create(
                 model=claude_config['model_name'],
                 max_tokens=claude_config['max_tokens'],
                 messages=message_list
             )
 
+            # print("Claude Response:", response)
             if response.content:
                 return response.content[0].text.strip()
             return None
@@ -84,5 +111,6 @@ def call_claude_assistant(image_url, source_image_path=None, resized_image_path=
             time.sleep(retry_delay)
             retry_count += 1
     
-    print(f"OpenAI API error after {max_retries} retries. Moving on to the next image.")
+    print(f"Anthropic API error after {max_retries} retries. Moving on to the next image.")
     return None
+
