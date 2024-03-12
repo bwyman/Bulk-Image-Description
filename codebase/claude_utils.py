@@ -5,6 +5,7 @@ import base64
 import httpx
 import requests
 import mimetypes
+import re
 from PIL import Image
 from io import BytesIO
 from config import claude_config
@@ -18,25 +19,17 @@ def parse_response(response_str):
         'image_description': ''
     }
 
-    current_section = None
-    lines = response_str.split('\n')
-    for line in lines:
-        line = line.strip()
-        if line.startswith('Alt Text (Short):'):
-            current_section = 'alt_text_short'
-        elif line.startswith('Alt Text (Long):'):
-            current_section = 'alt_text_long'
-        elif line.startswith('Image Description:'):
-            current_section = 'image_description'
-        else:
-            if current_section:
-                parsed_responses[current_section] += ' ' + line
+    sections = re.split(r'(Alt Text \(Short\):|Alt Text \(Long\):|Image Description:)', response_str)
+    sections = [section.strip() for section in sections if section.strip()]
 
-    for key in parsed_responses:
-        parsed_responses[key] = ' '.join(parsed_responses[key].split())
+    for i in range(0, len(sections), 2):
+        title = sections[i].lower().replace(':', '').replace(' ', '_')
+        content = sections[i + 1].replace('\n', ' ').strip()
+
+        if title in parsed_responses:
+            parsed_responses[title] = content
 
     return parsed_responses
-
 
 def call_claude_assistant(image_url, source_image_path=None, resized_image_path=None, max_retries=claude_config['max_retries'], retry_delay=claude_config['retry_delay']):
     client = anthropic.Client(api_key=claude_config['api_key'])
