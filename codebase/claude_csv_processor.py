@@ -1,9 +1,9 @@
 # claude_csv_processor.py
 import csv
 import os
-from datetime import datetime, timedelta
 import time
 from tqdm import tqdm
+from datetime import datetime, timedelta
 from importlib import import_module
 from image_processing import download_and_resize_image
 from config import claude_config
@@ -12,8 +12,9 @@ def process_csv(input_csv_path, organization, download_images=False):
     start_time = time.time()
     
     base_name = os.path.splitext(os.path.basename(input_csv_path))[0]
+    model_name = claude_config['model_name']
     prompt_version = claude_config['prompt_version']
-    output_csv_name = f"{base_name}_claude_{prompt_version}_{datetime.now().strftime('%Y%m%d%H%M')}.csv"
+    output_csv_name = f"{base_name}_{model_name}_{prompt_version}_{datetime.now().strftime('%Y%m%d%H%M')}.csv"
 
     project_directory = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     

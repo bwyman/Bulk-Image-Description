@@ -19,18 +19,18 @@ def parse_response(response_str):
         'image_description': ''
     }
 
-    sections = re.split(r'(Alt Text \(Short\):|Alt Text \(Long\):|Image Description:)', response_str)
-    sections = [section.strip() for section in sections if section.strip()]
+    pattern = r'(Alt Text \(Short\)|Alt Text \(Long\)|Image Description):[\s]*(.+?(?=\n\n|$))'
+    matches = re.findall(pattern, response_str, re.DOTALL)
 
-    for i in range(0, len(sections), 2):
-        title = sections[i].lower().replace(':', '').replace(' ', '_')
-        content = sections[i + 1].replace('\n', ' ').strip()
+    for match in matches:
+        title = match[0].lower().replace(' ', '_').replace('(', '').replace(')', '')
+        content = match[1].strip().replace('\n', ' ')
 
         if title in parsed_responses:
             parsed_responses[title] = content
 
     return parsed_responses
-
+    
 def call_claude_assistant(image_url, source_image_path=None, resized_image_path=None, max_retries=claude_config['max_retries'], retry_delay=claude_config['retry_delay']):
     client = anthropic.Client(api_key=claude_config['api_key'])
 
@@ -95,7 +95,7 @@ def call_claude_assistant(image_url, source_image_path=None, resized_image_path=
                 messages=message_list
             )
 
-            # print("Claude Response:", response)
+            # print("Claude Response:", response.content[0].text.strip())  # Print the response
             if response.content:
                 return response.content[0].text.strip()
             return None

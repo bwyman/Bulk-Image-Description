@@ -2,46 +2,30 @@
 
 import openai
 import time
+import re
 from config import openai_config
 from prompt_library import prompts
 
 def parse_response(response_str):
-    """
-    Parses the response string and extracts the alt text and image description.
-
-    Args:
-        response_str (str): The response string from the AI assistant.
-
-    Returns:
-        dict: A dictionary containing the parsed alt text and image description.
-    """
     parsed_responses = {
         'alt_text_short': '',
         'alt_text_long': '',
         'image_description': ''
     }
 
-    current_section = None
-    lines = response_str.split('\n')
-    for line in lines:
-        line = line.strip()
-        if line.startswith('Alt Text (Short):'):
-            current_section = 'alt_text_short'
-        elif line.startswith('Alt Text (Long):'):
-            current_section = 'alt_text_long'
-        elif line.startswith('Image Description:'):
-            current_section = 'image_description'
-        else:
-            if current_section:
-                parsed_responses[current_section] += ' ' + line
+    pattern = r'(Alt Text \(Short\)|Alt Text \(Long\)|Image Description):[\s]*(.+?(?=\n\n|$))'
+    matches = re.findall(pattern, response_str, re.DOTALL)
 
-    for key in parsed_responses:
-        parsed_responses[key] = ' '.join(parsed_responses[key].split())
+    for match in matches:
+        title = match[0].lower().replace(' ', '_').replace('(', '').replace(')', '')
+        content = match[1].strip().replace('\n', ' ')
+
+        if title in parsed_responses:
+            parsed_responses[title] = content
 
     return parsed_responses
 
-def call_openai_assistant(image_url, max_retries=openai_config['max_retries'], 
-retry_delay=openai_config['retry_delay']):
+def call_openai_assistant(image_url, max_retries=openai_config['max_retries'], retry_delay=openai_config['retry_delay']):
     """
     Calls the OpenAI assistant to generate alt text and image description for the given image URL.
 
