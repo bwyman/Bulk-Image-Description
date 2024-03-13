@@ -13,7 +13,7 @@ def parse_response(response_str):
         'image_description': ''
     }
 
-    pattern = r'(Alt Text \(Short\)|Alt Text \(Long\)|Image Description):[\s]*(.+?(?=\n\n|$))'
+    pattern = r'(Alt Text \(Short\)|Alt Text \(Long\)|Image Description):[\s]*(.+?)(?=\n\n(?:Alt Text \(Short\)|Alt Text \(Long\)|Image Description):|$)'
     matches = re.findall(pattern, response_str, re.DOTALL)
 
     for match in matches:
@@ -21,10 +21,10 @@ def parse_response(response_str):
         content = match[1].strip().replace('\n', ' ')
 
         if title in parsed_responses:
-            parsed_responses[title] = content
+            parsed_responses[title] = ' '.join(content.split())
 
     return parsed_responses
-
+            
 def call_openai_assistant(image_url, max_retries=openai_config['max_retries'], retry_delay=openai_config['retry_delay']):
     """
     Calls the OpenAI assistant to generate alt text and image description for the given image URL.
@@ -66,7 +66,12 @@ def call_openai_assistant(image_url, max_retries=openai_config['max_retries'], r
                 max_tokens=openai_config['max_tokens'],
             )
 
-            # print("OpenAI API Response:", response)
+            #print("OpenAI API Response:")
+            #print("Assistant:", response['choices'][0]['message']['content'])
+
+            parsed_response = parse_response(response['choices'][0]['message']['content'])
+            #print("Parsed Response:")
+            #print(parsed_response)
 
             if 'choices' in response and response['choices']:
                 choice = response['choices'][0]

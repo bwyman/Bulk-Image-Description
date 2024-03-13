@@ -7,7 +7,7 @@ openai_config = {
     'retry_delay': 5,
     'rate_limit_wait_time': 1.5,
     'max_tokens': 4096,
-    'prompt_version': 'iris_v5',
+    'prompt_version': 'iris_v5.4',
 }
 
 claude_config = {
@@ -16,7 +16,7 @@ claude_config = {
     'max_retries': 3,
     'retry_delay': 5,
     'max_tokens': 4096,
-    'prompt_version': 'iris_v5',
+    'prompt_version': 'iris_v5.4',
 }
 
 # Add more configurations for other AI engines like Claude here

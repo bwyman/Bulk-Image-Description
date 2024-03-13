@@ -19,7 +19,7 @@ def parse_response(response_str):
         'image_description': ''
     }
 
-    pattern = r'(Alt Text \(Short\)|Alt Text \(Long\)|Image Description):[\s]*(.+?(?=\n\n|$))'
+    pattern = r'(Alt Text \(Short\)|Alt Text \(Long\)|Image Description):[\s]*(.+?)(?=\n\n(?:Alt Text \(Short\)|Alt Text \(Long\)|Image Description):|$)'
     matches = re.findall(pattern, response_str, re.DOTALL)
 
     for match in matches:
@@ -27,9 +27,9 @@ def parse_response(response_str):
         content = match[1].strip().replace('\n', ' ')
 
         if title in parsed_responses:
-            parsed_responses[title] = content
+            parsed_responses[title] = ' '.join(content.split())
 
-    return parsed_responses
+    return parsed_responses    
     
 def call_claude_assistant(image_url, source_image_path=None, resized_image_path=None, max_retries=claude_config['max_retries'], retry_delay=claude_config['retry_delay']):
     client = anthropic.Client(api_key=claude_config['api_key'])
