@@ -13,6 +13,8 @@ openai_config = {
 claude_config = {
     'api_key': 'YOUR_CLAUDE_API_KEY',
     'model_name': 'claude-3-opus-20240229',
+#   'model_name': 'claude-3-sonnet-20240229',
+#   'model_name': 'claude-3-haiku-20240307',
     'max_retries': 3,
     'retry_delay': 5,
     'max_tokens': 4096,

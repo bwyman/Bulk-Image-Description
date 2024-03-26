@@ -30,7 +30,7 @@ def download_and_resize_image(image_url, source_image_path, resized_image_path, 
                 new_height = target_size
                 new_width = int(width * (target_size / height))
 
-            resized_img = img.resize((new_width, new_height), Image.ANTIALIAS)
+            resized_img = img.resize((new_width, new_height), Image.LANCZOS)
             resized_img.save(resized_image_path)
 
     except requests.RequestException as e:
